@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection System - Methodology</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div id="branding">
+            <img src="../static/images/Fraud detection.jpg" alt="Logo">
+            <h1>FraudDetectPro</h1>
+        </div>
+        <nav>
+            <ul>
+                {% if current_user.is_authenticated %}
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/predict">Predict Fraud</a></li>
+                
+                {% else %}
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+                {% endif %}
+                <li><a href="/about">About</a></li>
+                <li class="current"><a href="/methodology">Methodology</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="content-section">
+            <h1 style="text-align: center;">Our Fraud Detection Methodology</h1>
+            <p>At FraudDetectPro, our fraud detection system is built upon a robust machine learning framework, designed to provide accurate and actionable insights into financial transactions. Our methodology involves several key stages, from data preprocessing to model deployment and continuous improvement.</p>
+
+            <div class="image-gallery">
+                <img src="../static/images/methodology_data.jpg" alt="Data Collection" style="width: 300px;">
+                <img src="../static/images/methodology_ml.jpg" alt="Machine Learning" style="width: 300px;">
+            </div>
+
+            <h2>1. Data Collection and Preprocessing</h2>
+            <p>The foundation of any effective machine learning model is high-quality data. We utilize diverse datasets comprising various transaction attributes, including:</p>
+            <ul>
+                <li><strong>Amount:</strong> The value of the transaction.</li>
+                <li><strong>Card Type:</strong> E.g., Mastercard, Rupay, Visa.</li>
+                <li><strong>Location:</strong> Geographic location of the transaction.</li>
+                <li><strong>Purchase Category:</strong> E.g., Digital, Point-of-Sale (POS).</li>
+                <li><strong>Customer Age:</strong> Age of the cardholder.</li>
+                <li><strong>Time-based Features:</strong> Hour of the day, day of the month, day of the week (weekday), and month of the year.</li>
+            </ul>
+            <p>Before feeding data into our models, extensive preprocessing is performed. This includes:</p>
+            <ul>
+                <li><strong>Encoding Categorical Features:</strong> Using techniques like Label Encoding for `location`, `card_type`, and `purchase_category` to convert them into numerical representations that machine learning models can understand.</li>
+                <li><strong>Handling Missing Values:</strong> Strategies to address any missing data points.</li>
+                <li><strong>Feature Scaling:</strong> Normalizing numerical features to ensure that no single feature dominates the model's learning process.</li>
+            </ul>
+
+            <h2>2. Model Selection and Training</h2>
+            <p>We employ a dual-model approach for comprehensive fraud detection:</p>
+            <h3>Binary Classification Model (Is it Fraudulent or Not?)</h3>
+            <p>For the primary task of identifying whether a transaction is fraudulent or safe, we utilize a **Support Vector Classifier (SVC)**. SVCs are powerful for classification tasks, especially in high-dimensional spaces, and are effective in finding a hyperplane that best separates different classes. Our SVC model is trained to classify transactions into two categories: 'Fraud' or 'Safe'.</p>
+
+            <h3>Multiclass Classification Model (What type of Fraud is it?)</h3>
+            <p>Once a transaction is flagged as fraudulent by the SVC, a second model steps in to classify the specific type of fraud. For this, we use a **Decision Tree Classifier**. Decision Trees are interpretable and can capture non-linear relationships, making them suitable for categorizing fraud into types like 'Identity Theft', 'Phishing', 'Unauthorized Transaction', etc. This model provides more granular insights, aiding in targeted prevention and recovery efforts.</p>
+
+            <div class="image-gallery">
+                <img src="../static/images/methodology_model.png" alt="Model Training" style="width: 300px;">
+                <img src="../static/images/methodology_deployment.png" alt="Deployment" style="width: 420px;">
+            </div>
+
+            <h2>3. Model Evaluation and Tuning</h2>
+            <p>Our models undergo rigorous evaluation using various metrics such as accuracy, precision, recall, F1-score, and ROC AUC to ensure optimal performance. Hyperparameter tuning is also performed to optimize model parameters for the best possible fraud detection rates and minimal false positives.</p>
+            
+            <div class="image-gallery">
+                <img src="../static/images/SVC.png" alt="Model Training" style="width: 420px; height: 500PX;">
+            </div>
+
+            <h2>4. Deployment and Real-time Prediction</h2>
+            <p>The trained models and encoders are serialized using Python's `pickle` module and integrated into our Flask web application. When a user inputs transaction data, the data is preprocessed using the same encoders used during training, and then passed to both the SVC and Decision Tree models for real-time prediction.</p>
+
+            <h2>5. Continuous Improvement</h2>
+            <p>The landscape of financial fraud is constantly evolving. We are committed to continuous improvement, regularly updating our datasets, retraining our models with new data, and exploring advanced machine learning techniques to stay ahead of emerging fraud patterns.</p>
+            <p>Our goal is to provide a reliable, efficient, and intelligent system that empowers users to protect their financial well-being.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FraudDetectPro. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection System - About Us</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div id="branding">
+            <img src="../static/images/Fraud detection.jpg" alt="Logo">
+            <h1>FraudDetectPro</h1>
+        </div>
+        <nav>
+            <ul>
+                {% if current_user.is_authenticated %}
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/predict">Predict Fraud</a></li>
+                
+                {% else %}
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+                {% endif %}
+                <li class="current"><a href="/about">About</a></li>
+                <li><a href="/methodology">Methodology</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="content-section">
+            <h1 style="text-align: center;">About FraudDetectPro</h1>
+            <p>Welcome to **FraudDetectPro**, your trusted partner in combating financial fraud. In today's digital age, the complexity and volume of financial transactions have grown exponentially, making it increasingly challenging to identify and prevent fraudulent activities. Our mission is to provide individuals and businesses with a robust, intelligent, and easy-to-use system to detect and prevent fraudulent transactions in real-time.</p>
+
+            <div class="image-gallery">
+                <img src="../static/images/about_mission.png" alt="Our Mission" style="width: 300px;">
+                <img src="../static/images/about_team.png" alt="Our Team" style="width: 300px;">
+            </div>
+
+            <h2>Our Vision</h2>
+            <p>Our vision is to create a safer financial ecosystem where users can transact with confidence, knowing that advanced AI is working tirelessly to protect their assets. We aim to be at the forefront of fraud detection technology, continuously improving our models and expanding our capabilities to counter evolving fraud techniques.</p>
+
+            <h2>How it Works</h2>
+            <p>FraudDetectPro leverages state-of-the-art machine learning models to analyze various parameters of a transaction, including amount, card type, location, purchase category, customer age, and time-based features (hour, day, weekday, month). Our system performs two key levels of analysis:</p>
+            <ul>
+                <li><strong>Binary Classification:</strong> Determines whether a transaction is legitimate or fraudulent.</li>
+                <li><strong>Multiclass Classification (Fraud Type):</strong> For transactions identified as fraudulent, our system further classifies the type of fraud (e.g., identity theft, phishing, unauthorized transactions), providing crucial insights for mitigation.</li>
+            </ul>
+
+            <h2>Why Choose Us?</h2>
+            <ul>
+                <li><strong>Accuracy:</strong> Our models are trained on extensive datasets to ensure high accuracy in detecting various fraud patterns.</li>
+                <li><strong>Real-time Detection:</strong> Get instant predictions, allowing for immediate action to prevent financial losses.</li>
+                <li><strong>User-Friendly Interface:</strong> A simple and intuitive web interface makes it easy for anyone to input transaction details and get results.</li>
+                <li><strong>Comprehensive Insights:</strong> Beyond just detecting fraud, we provide the specific type of fraud, aiding in better understanding and response.</li>
+                <li><strong>Data Security:</strong> We prioritize the security and privacy of your transaction data.</li>
+            </ul>
+
+            <p>Join us in the fight against fraud. With FraudDetectPro, you're not just preventing losses; you're building a more secure financial future.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FraudDetectPro. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

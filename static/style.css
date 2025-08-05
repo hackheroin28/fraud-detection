@@ -1,0 +1,698 @@
+/* --- Global Variables (New: Define your color palette here for easy changes) --- */
+:root {
+    --primary-orchid: #DA70D6; /* Main Orchid color for branding, buttons, highlights */
+    --dark-orchid: #BD64B9;   /* Slightly darker orchid for hover states */
+    --light-orchid-tint: #FDF5FD; /* Very light orchid for subtle backgrounds */
+    
+    --accent-green: #28a745;   /* Green for safe transactions, success (remains for clarity) */
+    --accent-red: #dc3545;     /* Red for fraud transactions, danger (remains for clarity) */
+    
+    --light-bg: #F8F9FA;       /* Very light gray for body background */
+    --card-bg: #FFFFFF;        /* White for cards and content sections */
+    --text-dark: #343A40;      /* Dark gray for primary text */
+    --text-medium: #6C757D;    /* Medium gray for secondary text */
+    --border-light: #E9ECEF;   /* Light border color */
+    
+    --shadow-light: rgba(0, 0, 0, 0.08);   /* Subtle shadow */
+    --shadow-medium: rgba(0, 0, 0, 0.12);  /* Slightly more prominent shadow on hover */
+}
+
+
+/* --- Basic Styles --- */
+body {
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif; /* More modern font stack */
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures footer sticks to the bottom */
+}
+
+.container {
+    max-width: 1200px; /* Use max-width for better responsiveness */
+    width: 90%; /* Take up 90% of screen width on larger screens */
+    margin: 20px auto; /* Add margin top/bottom */
+    padding: 0 20px;
+    box-sizing: border-box;
+    flex-grow: 1; /* Allows container to take up available space */
+}
+
+/* --- Header --- */
+header {
+    background: var(--text-dark); /* Dark header background */
+    color: var(--card-bg);
+    padding: 15px 5%; /* Adjust padding relative to screen width */
+    min-height: 70px;
+    border-bottom: 3px solid var(--primary-orchid); /* Vibrant orchid accent */
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 8px var(--shadow-medium); /* Subtle shadow for depth */
+}
+
+header a {
+    color: var(--card-bg);
+    text-decoration: none;
+    text-transform: uppercase;
+    font-size: 0.95em; /* Slightly smaller font for nav links */
+    font-weight: 500;
+    transition: color 0.3s ease; /* Smooth transition on hover */
+}
+
+header a:hover {
+    color: var(--primary-orchid); /* Highlight on hover */
+}
+
+header ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+header li {
+    display: inline-block; /* Use inline-block for better spacing control */
+    padding: 0 15px;
+}
+
+header #branding {
+    display: flex;
+    align-items: center;
+}
+
+header #branding h1 {
+    margin: 0;
+    font-size: 1.8em; /* Slightly larger heading */
+    color: var(--card-bg);
+    letter-spacing: 0.5px;
+}
+
+header #branding img {
+    height: 45px; /* Adjust as needed for your logo */
+    margin-right: 12px;
+}
+
+header nav {
+    margin-top: 0; /* Remove old margin-top */
+}
+
+header .highlight, header .current a {
+    color: var(--primary-orchid); /* Highlight current/active link */
+    font-weight: bold;
+}
+
+/* --- Flash Messages --- */
+.flash-message {
+    padding: 12px;
+    margin-bottom: 25px;
+    border-radius: 8px; /* Slightly more rounded corners */
+    text-align: center;
+    font-weight: 600; /* Bolder text */
+    font-size: 0.95em;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.05); /* Subtle shadow */
+}
+
+.flash-message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+}
+
+.flash-message.danger {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+}
+
+.flash-message.info {
+    background-color: #d1ecf1;
+    color: #0c5460;
+    border: 1px solid #bee5eb;
+}
+
+
+/* --- Forms --- */
+form {
+    background: var(--card-bg);
+    padding: 30px; /* More generous padding */
+    border-radius: 10px; /* Slightly more rounded */
+    box-shadow: 0 4px 10px var(--shadow-light); /* Consistent shadow */
+    margin-top: 30px;
+    max-width: 550px; /* Slightly wider forms */
+    margin-left: auto;
+    margin-right: auto;
+}
+
+form label {
+    display: block;
+    margin-bottom: 10px;
+    font-weight: 600; /* Bolder labels */
+    color: var(--text-medium);
+    font-size: 0.95em;
+}
+
+form input[type="text"],
+form input[type="email"],
+form input[type="password"],
+form input[type="number"],
+form select {
+    width: calc(100% - 24px); /* Account for padding and border */
+    padding: 12px; /* More padding */
+    margin-bottom: 20px;
+    border: 1px solid var(--border-light);
+    border-radius: 6px; /* Slightly more rounded inputs */
+    font-size: 1em;
+    color: var(--text-dark);
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+form input[type="text"]:focus,
+form input[type="email"]:focus,
+form input[type="password"]:focus,
+form input[type="number"]:focus,
+form select:focus {
+    border-color: var(--primary-orchid); /* Orchid glow on focus */
+    box-shadow: 0 0 0 3px rgba(218, 112, 214, 0.2); /* Subtle orchid glow on focus */
+    outline: none;
+}
+
+form button {
+    background: var(--primary-orchid);
+    color: var(--card-bg);
+    padding: 12px 25px; /* More generous padding */
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 1.05em; /* Slightly larger font */
+    font-weight: 600;
+    width: 100%;
+    transition: background 0.3s ease, transform 0.2s ease;
+}
+
+form button:hover {
+    background: var(--dark-orchid); /* Darker orchid on hover */
+    transform: translateY(-2px); /* Subtle lift */
+}
+
+/* --- Tables --- */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 25px;
+    background: var(--card-bg);
+    box-shadow: 0 4px 10px var(--shadow-light);
+    border-radius: 10px;
+    overflow: hidden; /* Ensures rounded corners apply to content */
+}
+
+table th, table td {
+    border: 1px solid var(--border-light); /* Lighter border for table cells */
+    padding: 15px 20px; /* More padding */
+    text-align: left;
+}
+
+table th {
+    background-color: var(--light-bg); /* Light background for headers */
+    font-weight: 600;
+    color: var(--text-medium);
+    text-transform: uppercase;
+    font-size: 0.85em;
+    letter-spacing: 0.5px;
+}
+
+table tbody tr:nth-child(even) {
+    background-color: var(--light-orchid-tint); /* Very subtle zebra striping with orchid tint */
+}
+
+table tbody tr:hover {
+    background-color: #F0F5F8; /* Subtle highlight on hover */
+}
+
+/* --- Dashboard Summary Cards --- */
+.dashboard-summary {
+    display: flex;
+    justify-content: center; /* Center cards */
+    gap: 25px; /* More space between cards */
+    margin-top: 35px;
+    flex-wrap: wrap;
+}
+
+.summary-card {
+    background: var(--card-bg);
+    padding: 30px; /* More generous padding */
+    border-radius: 12px; /* More rounded corners */
+    box-shadow: 0 6px 15px var(--shadow-light); /* More prominent initial shadow */
+    text-align: center;
+    flex: 1;
+    min-width: 260px; /* Adjusted min-width */
+    max-width: 320px; /* Adjusted max-width */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-light); /* Subtle border */
+}
+
+.summary-card:hover {
+    transform: translateY(-8px); /* More pronounced lift effect */
+    box-shadow: 0 12px 25px var(--shadow-medium); /* Stronger shadow on hover */
+}
+
+.summary-card h2 { /* Targeting h2 as per your index.html */
+    color: var(--text-dark);
+    margin-bottom: 15px;
+    font-size: 1.6em; /* Larger heading for cards */
+    font-weight: 600;
+}
+
+.summary-card p {
+    font-size: 2.8em; /* Much larger font for numbers */
+    font-weight: 700; /* Bolder numbers */
+    color: var(--primary-orchid); /* Orchid color for numbers */
+    margin: 0;
+    letter-spacing: -1px; /* Tighter letter spacing for numbers */
+}
+
+.summary-card img {
+    height: 70px; /* Slightly larger icon size */
+    margin-bottom: 20px;
+    filter: drop-shadow(0 2px 3px rgba(0,0,0,0.1)); /* Subtle shadow on icons */
+}
+
+/* --- Transaction Overview Chart Section (Updated and Corrected) --- */
+.chart-section { /* Corrected class name */
+    background: var(--card-bg); /* White background */
+    padding: 25px; /* Adjusted padding */
+    border-radius: 12px; /* More rounded corners */
+    box-shadow: 0 6px 15px var(--shadow-light); /* Consistent shadow */
+    text-align: center;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    border: 1px solid var(--border-light); /* Subtle border */
+
+    /* Default size for the chart container */
+    width: 90%; /* Take 90% of parent width initially */
+    max-width: 480px; /* Control its maximum size on larger screens */
+    margin: 40px auto; /* Center it if not in flex container */
+}
+
+/* Ensure the canvas itself is responsive within its parent .chart-section */
+.chart-section canvas {
+    max-width: 100%; /* Ensures the canvas never overflows its parent */
+    height: auto; /* Maintains aspect ratio */
+    display: block; /* Prevents extra space below the canvas */
+}
+
+
+/* --- Main dashboard overview wrapper (For side-by-side layout) --- */
+.dashboard-main-overview {
+    display: flex; /* Use flexbox to put children side-by-side */
+    flex-wrap: wrap; /* Allow items to wrap on smaller screens */
+    gap: 30px; /* Space between the dashboard summary and the chart */
+    align-items: flex-start; /* Align items to the top */
+    margin-top: 35px; /* Add some top margin */
+    justify-content: center; /* Center items if they don't fill the space */
+}
+
+.dashboard-main-overview .dashboard-summary {
+    flex: 2; /* Summary takes more space (e.g., 2/3) */
+    min-width: 320px; /* Adjusted min-width */
+    max-width: 800px; /* Prevent it from getting too wide */
+    margin-top: 0; /* Remove top margin if wrapped in flex container */
+    /* .dashboard-summary already has its own display:flex etc. */
+}
+
+.dashboard-main-overview .chart-section { /* Corrected class name here */
+    flex: 1; /* Chart takes less space (e.g., 1/3) */
+    min-width: 300px; /* Ensure chart doesn't get too small in flex */
+    max-width: 480px; /* Consistent max-width for the chart container */
+    margin: 0; /* Remove individual auto margins when in flex context */
+}
+
+
+/* --- General Content Sections (Used on About, Methodology, Contact, and Predict Result) --- */
+.content-section {
+    background: var(--card-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px var(--shadow-light);
+    margin-top: 30px;
+    line-height: 1.7; /* Improve readability of text */
+    box-sizing: border-box;
+}
+
+.content-section h1, .content-section h2 {
+    color: var(--text-dark);
+    margin-bottom: 20px; /* More space below headings */
+    border-bottom: 2px solid var(--border-light);
+    padding-bottom: 12px;
+    text-align: center;
+    font-size: 2em; /* Larger headings */
+    font-weight: 600;
+}
+
+.content-section p {
+    margin-bottom: 15px;
+    color: var(--text-medium);
+}
+
+.content-section ul {
+    list-style: disc;
+    margin-left: 25px;
+    margin-bottom: 15px;
+    color: var(--text-medium);
+}
+
+.content-section ul li {
+    margin-bottom: 8px;
+}
+
+/* --- Button Styles --- */
+.button {
+    display: inline-block;
+    padding: 12px 25px;
+    background-color: var(--primary-orchid);
+    color: var(--card-bg);
+    text-decoration: none;
+    border-radius: 6px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    border: none;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: 600;
+    text-align: center;
+}
+
+.button:hover {
+    background-color: var(--dark-orchid);
+    transform: translateY(-2px);
+}
+
+.primary-button {
+    background-color: var(--primary-orchid);
+}
+.primary-button:hover {
+    background-color: var(--dark-orchid);
+}
+
+/* --- Image Gallery --- */
+.image-gallery {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px; /* More space between images */
+    justify-content: center;
+    margin-top: 35px;
+    margin-bottom: 35px;
+}
+
+.image-gallery img {
+    max-width: 100%;
+    height: 280px; /* Slightly larger fixed height */
+    width: auto;
+    object-fit: cover;
+    border-radius: 12px;
+    box-shadow: 0 8px 20px var(--shadow-medium); /* More prominent shadow */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.image-gallery img:hover {
+    transform: scale(1.05); /* Slightly enlarge on hover */
+    box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+}
+
+/* --- Recent Predictions Section --- */
+.recent-predictions-list {
+    display: grid; /* Use grid for more flexible layout */
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+    gap: 25px; /* Space between items */
+    margin-top: 25px;
+}
+
+.prediction-item {
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-light);
+    border-radius: 10px;
+    padding: 20px; /* More padding */
+    box-shadow: 0 2px 8px var(--shadow-light);
+    transition: transform 0.2s ease-in-out;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.prediction-item:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 4px 12px var(--shadow-medium);
+}
+
+.prediction-item.fraud {
+    border-left: 6px solid var(--accent-red); /* Thicker, red border */
+    background-color: #FFF3F4; /* Very light red tint */
+}
+
+.prediction-item.safe {
+    border-left: 6px solid var(--accent-green); /* Thicker, green border */
+    background-color: #F1FFF3; /* Very light green tint */
+}
+
+.prediction-item p {
+    margin-bottom: 8px;
+    color: var(--text-medium);
+    font-size: 1em;
+}
+
+.prediction-item p strong {
+    color: var(--text-dark);
+}
+
+.prediction-item .timestamp {
+    font-size: 0.8em;
+    color: var(--text-medium);
+    text-align: right;
+    margin-top: auto;
+}
+
+.status-fraud { color: var(--accent-red); font-weight: bold; }
+.status-safe { color: var(--accent-green); font-weight: bold; }
+
+/* --- Transaction History Table (Specific colors) --- */
+table .fraud {
+    background-color: #FFF3F4; /* Light red background for fraud rows */
+    color: var(--text-dark);
+}
+
+table .safe {
+    background-color: #F1FFF3; /* Light green background for safe rows */
+    color: var(--text-dark);
+}
+
+/* --- Footer --- */
+footer {
+    background: var(--text-dark);
+    color: var(--card-bg);
+    text-align: center;
+    padding: 25px; /* More padding */
+    margin-top: auto;
+    border-top: 3px solid var(--primary-orchid);
+    font-size: 0.9em;
+}
+
+/* --- Responsive Design Considerations --- */
+@media (max-width: 1024px) {
+    .container {
+        width: 95%; /* Wider container on medium screens */
+    }
+
+    header {
+        padding: 15px 20px;
+    }
+
+    .dashboard-main-overview {
+        flex-direction: column; /* Stack summary and chart vertically */
+        align-items: center; /* Center them when stacked */
+    }
+
+    .dashboard-main-overview .dashboard-summary {
+        width: 90%;
+        max-width: 650px; /* Limit max width even when stacked */
+        gap: 15px; /* Adjust gap for stacked cards */
+    }
+
+    .dashboard-main-overview .summary-card {
+        min-width: 280px; /* Ensure cards are still readable */
+    }
+
+    .dashboard-main-overview .chart-section { /* Corrected class name here */
+        width: 90%;
+        max-width: 500px; /* Chart max-width when stacked on medium screens */
+        margin-top: 30px; /* Add vertical space between stacked items */
+    }
+}
+
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        min-height: auto;
+    }
+
+    header #branding h1 {
+        font-size: 1.6em;
+    }
+
+    header nav ul {
+        text-align: center;
+        padding-top: 10px;
+    }
+
+    header nav li {
+        display: block;
+        padding: 8px 0;
+    }
+
+    .dashboard-summary {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .summary-card {
+        width: 95%;
+        min-width: unset;
+        max-width: 320px; /* Keep a reasonable max-width for smaller screens */
+    }
+
+    .chart-section { /* Corrected class name here */
+        width: 95%;
+        max-width: 400px; /* Chart max-width on smaller screens */
+        margin: 20px auto;
+    }
+
+    form {
+        width: 95%;
+        padding: 20px;
+    }
+
+    table th, table td {
+        padding: 10px 12px;
+        font-size: 0.8em;
+    }
+
+    .image-gallery img {
+        height: 220px; /* Adjust image height for smaller screens */
+    }
+
+    .recent-predictions-list {
+        grid-template-columns: 1fr; /* Stack prediction items vertically */
+        align-items: center;
+    }
+
+    .prediction-item {
+        width: 95%;
+        max-width: 350px; /* Limit max-width for stacked items */
+        min-width: unset;
+    }
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 0 10px;
+    }
+    header {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    form {
+        padding: 15px;
+    }
+    .summary-card, .chart-section, .prediction-item {
+        padding: 15px;
+    }
+}
+/* Add to your static/style.css file */
+
+/* Styling for the Prediction Result Section */
+.prediction-result-section {
+    margin-top: 30px;
+    padding: 30px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.prediction-result-section.fraud {
+    background-color: #ffebeb; /* Light red background */
+    border: 2px solid var(--accent-red);
+}
+
+.prediction-result-section.safe {
+    background-color: #ebffe9; /* Light green background */
+    border: 2px solid var(--accent-green);
+}
+
+.prediction-result-section h2 {
+    font-size: 2em;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+    border-bottom: none; /* Remove border from generic h2 style */
+    padding-bottom: 0;
+}
+
+.prediction-result-section p {
+    font-size: 1.1em;
+    margin-bottom: 10px;
+    color: var(--text-medium);
+}
+
+/* NEW: Styling for Fraud Info Box */
+.fraud-info-box {
+    margin-top: 30px;
+    padding: 25px;
+    background-color: var(--card-bg); /* White background for the info box */
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow for depth */
+    text-align: left; /* Align text left within the box */
+    border: 1px solid var(--border-light);
+}
+
+.fraud-info-box h3 {
+    font-size: 1.6em;
+    color: var(--primary-orchid); /* Use orchid for the info box title */
+    margin-bottom: 15px;
+    text-align: center; /* Center the info box title */
+    padding-bottom: 10px;
+    border-bottom: 2px solid var(--border-light);
+}
+
+.fraud-info-box h4 {
+    font-size: 1.2em;
+    color: var(--text-dark);
+    margin-top: 20px;
+    margin-bottom: 10px;
+    text-align: left; /* Align h4 left */
+}
+
+.fraud-info-box p {
+    font-size: 1em;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    color: var(--text-medium);
+}
+
+.fraud-info-box ul {
+    list-style-type: disc; /* Use discs for bullet points */
+    margin-left: 25px;
+    padding-left: 0;
+    margin-bottom: 15px;
+}
+
+.fraud-info-box ul li {
+    margin-bottom: 8px;
+    color: var(--text-dark);
+    font-size: 0.95em;
+}

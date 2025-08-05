@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection System - Dashboard</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div id="branding">
+            <img src="../static/images/Fraud detection.jpg" alt="Logo">
+            <h1>FraudDetectPro</h1>
+        </div>
+        <nav>
+            <ul>
+                {% if current_user.is_authenticated %}
+                <li class="current"><a href="/index">Dashboard</a></li>
+                <li><a href="/predict">Predict Fraud</a></li>
+                
+                {% else %}
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+                {% endif %}
+                <li><a href="/about">About</a></li>
+                <li><a href="/methodology">Methodology</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <h1 style="text-align: center; color: #333; margin-bottom: 30px;">Welcome to Your Dashboard, {{ current_user.username }}!</h1>
+
+       <div class="dashboard-summary">
+            <div class="summary-card">
+                <img src="/static/images/total_transactions.jpg" alt="Total Transactions" style="height: 60px; margin-bottom: 15px;">
+                <h2>Total Transactions</h2>
+                <p>{{ txns|length }}</p>
+            </div>
+            <div class="summary-card">
+                <img src="/static/images/safe_transactions.png" alt="Safe Transactions" style="height: 60px; margin-bottom: 15px;">
+                <h2>Safe Transactions</h2>
+                <p>{{ fraud_safe_chart_data['data'][1] }}</p>
+            </div>
+            <div class="summary-card">
+                <img src="/static/images/fraud_transactions.jpg" alt="Fraud Transactions" style="height: 60px; margin-bottom: 15px;">
+                <h2>Fraud Transactions</h2>
+                <p>{{ fraud_safe_chart_data['data'][0] }}</p>
+            </div>
+        </div>
+
+        <div class="content-section chart-section">
+            <h2>Transaction Overview</h2>
+            <canvas id="fraudSafeChart"></canvas>
+        </div>
+
+        <section class="content-section" id="about-section" style="margin-top: 40px;">
+            <h2 style="text-align: center;">About FraudDetectPro</h2>
+            <p style="text-align: center;">FraudDetectPro is your advanced solution for real-time transaction fraud detection. Leveraging cutting-edge machine learning models, we provide swift and accurate assessments to safeguard your financial transactions and provide insights into potential fraud types.</p>
+            <p style="text-align: center; margin-top: 20px;">
+                <a href="/about" class="button primary-button">Learn More About Us</a>
+            </p>
+        </section>
+
+        <section class="content-section" id="prediction-summary-section" style="margin-top: 40px;">
+            <h2 style="text-align: center;">Your Recent Predictions</h2>
+            {% if txns %} {# Check if there are any transactions at all #}
+                <div class="recent-predictions-list">
+                    {% for transaction in txns[:5] %} {# Display up to the 5 most recent transactions #}
+                        <div class="prediction-item {% if transaction.result == 'Fraud' %}fraud{% else %}safe{% endif %}">
+                            <p><strong>Amount:</strong> ${{ "%.2f"|format(transaction.amount) }}</p>
+                            <p><strong>Location:</strong> {{ transaction.location }}</p>
+                            <p><strong>Result:</strong>
+                                {% if transaction.result == 'Fraud' %}
+                                    <span style="color: red; font-weight: bold;">Fraud Detected!</span> (Type: {{ transaction.fraud_type }})
+                                {% else %}
+                                    <span style="color: green; font-weight: bold;">Safe Transaction</span>
+                                {% endif %}
+                            </p>
+                            <p class="timestamp">{{ transaction.timestamp.strftime('%Y-%m-%d %H:%M') }}</p>
+                        </div>
+                    {% endfor %}
+                </div>
+                <p style="text-align: center; margin-top: 20px;">
+                    <a href="/predict" class="button primary-button">Make a New Prediction</a>
+                </p>
+            {% else %}
+                <p style="text-align: center;">No recent predictions to display. Start by making your first one!</p>
+                <p style="text-align: center; margin-top: 20px;">
+                    <a href="/predict" class="button primary-button">Make Your First Prediction</a>
+                </p>
+            {% endif %}
+        </section>
+
+        {# Existing Transaction History Table #}
+        <div class="content-section" style="margin-top: 40px;">
+            <h2>Transaction History</h2>
+            {% if txns %}
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Timestamp</th>
+                                <th>Amount</th>
+                                <th>Card Type</th>
+                                <th>Location</th>
+                                <th>Category</th>
+                                <th>Age</th>
+                                <th>Result</th>
+                                <th>Fraud Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for txn in txns %}
+                            <tr class="{{ 'fraud' if txn.result == 'Fraud' else 'safe' }}">
+                                <td>{{ txn.timestamp.strftime('%Y-%m-%d %H:%M') }}</td>
+                                <td>${{ "%.2f"|format(txn.amount) }}</td>
+                                <td>{{ txn.card_type }}</td>
+                                <td>{{ txn.location }}</td>
+                                <td>{{ txn.purchase_category }}</td>
+                                <td>{{ txn.customer_age }}</td>
+                                <td>
+                                    {% if txn.result == 'Fraud' %}
+                                        <span class="status-fraud">Fraud</span>
+                                    {% else %}
+                                        <span class="status-safe">Safe</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ txn.fraud_type }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <p>No transactions yet. Make a prediction to see your history here!</p>
+            {% endif %}
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FraudDetectPro. All rights reserved.</p>
+    </footer>
+
+    <script>
+    const ctx = document.getElementById('fraudSafeChart').getContext('2d');
+    const fraudSafeChart = new Chart(ctx, {
+        type: 'pie',
+        data: {
+            // --- MODIFIED PART ---
+            labels: {{ fraud_safe_chart_data.labels | safe }}, // Add | safe
+            datasets: [{
+                data: {{ fraud_safe_chart_data.data | safe }}, // Add | safe
+            // --- END MODIFIED PART ---
+                backgroundColor: ['#dc3545', '#28a745'], // Red for Fraud, Green for Safe
+                borderColor: ['#fff', '#fff'],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Fraud vs. Safe Transactions'
+                }
+            }
+        }
+        });
+</script>
+</body>
+</html>

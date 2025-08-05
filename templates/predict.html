@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection System - Predict Fraud</title>
+    <link rel="stylesheet" href="../static/style.css">
+</head>
+<body>
+    <header>
+        <div id="branding">
+            <img src="../static/images/Fraud detection.jpg" alt="Logo">
+            <h1>FraudDetectPro</h1>
+        </div>
+        <nav>
+            <ul>
+                {% if current_user.is_authenticated %}
+                <li><a href="/">Dashboard</a></li>
+                <li class="current"><a href="/predict">Predict Fraud</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/methodology">Methodology</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/logout">Logout</a></li> {# Logout always visible if authenticated #}
+                {% else %}
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/methodology">Methodology</a></li>
+                <li><a href="/contact">Contact</a></li>
+                {% endif %}
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                <div class="flash-messages-container">
+                    {% for category, message in messages %}
+                        <div class="flash-message {{ category }}">{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        {% endwith %}
+
+        <h1 style="text-align: center; color: #333; margin-bottom: 30px;">Predict Transaction Fraud</h1>
+
+        <form method="POST">
+            <label for="amount">Amount:</label>
+            <input type="number" step="0.01" id="amount" name="amount" required value="{{ prediction.input_data.amount if prediction and prediction.input_data else '' }}">
+
+            <label for="card_type">Card Type:</label>
+            <select id="card_type" name="card_type" required>
+                <option value="">Select Card Type</option>
+                <option value="mastercard" {% if prediction and prediction.input_data and prediction.input_data.card_type == 'mastercard' %}selected{% endif %}>Mastercard</option>
+                <option value="rupay" {% if prediction and prediction.input_data and prediction.input_data.card_type == 'rupay' %}selected{% endif %}>Rupay</option>
+                <option value="visa" {% if prediction and prediction.input_data and prediction.input_data.card_type == 'visa' %}selected{% endif %}>Visa</option>
+            </select>
+
+            <label for="location">Location:</label>
+            <select id="location" name="location" required>
+                <option value="">Select Location</option>
+                {# This loop populates the dropdown using the 'locations' list passed from app.py #}
+                {% for loc in locations %}
+                <option value="{{ loc }}" {% if prediction and prediction.input_data and prediction.input_data.location == loc %}selected{% endif %}>{{ loc }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="purchase_category">Purchase Category:</label>
+            <select id="purchase_category" name="purchase_category" required>
+                <option value="">Select Category</option>
+                <option value="digital" {% if prediction and prediction.input_data and prediction.input_data.purchase_category == 'digital' %}selected{% endif %}>Digital</option>
+                <option value="pos" {% if prediction and prediction.input_data and prediction.input_data.purchase_category == 'pos' %}selected{% endif %}>POS</option>
+            </select>
+
+            <label for="customer_age">Customer Age:</label>
+            <input type="number" id="customer_age" name="customer_age" required value="{{ prediction.input_data.customer_age if prediction and prediction.input_data else '' }}">
+
+            <label for="hour">Hour (0-23):</label>
+            <input type="number" id="hour" name="hour" min="0" max="23" required value="{{ prediction.input_data.hour if prediction and prediction.input_data else '' }}">
+
+            <label for="day">Day (1-31):</label>
+            <input type="number" id="day" name="day" min="1" max="31" required value="{{ prediction.input_data.day if prediction and prediction.input_data else '' }}">
+
+            <label for="weekday">Weekday (0-6, Monday=0):</label>
+            <input type="number" id="weekday" name="weekday" min="0" max="6" required value="{{ prediction.input_data.weekday if prediction and prediction.input_data else '' }}">
+
+            <label for="month">Month (1-12):</label>
+            <input type="number" id="month" name="month" min="1" max="12" required value="{{ prediction.input_data.month if prediction and prediction.input_data else '' }}">
+
+            <button type="submit">Predict</button>
+        </form>
+
+        {# --- UPDATED: Display Prediction Result and Fraud Info --- #}
+        {% if prediction %}
+            <div class="content-section prediction-result-section {{ 'fraud' if prediction.is_fraudulent == 1 else 'safe' }}">
+                <h2>Prediction Result: <span class="status-{{ 'fraud' if prediction.is_fraudulent == 1 else 'safe' }}">{{ prediction.reason }}</span></h2>
+                
+                {% if prediction.is_fraudulent == 1 %}
+                    <p>Detected Fraud Type: <strong class="status-fraud">{{ prediction.fraud_type }}</strong></p>
+                    <img src="../static/images/Fraud Alert.jpg" alt="Fraud Alert" style="width: 150px; margin-top: 20px;">
+                    
+                    {# Display detailed fraud information if provided #}
+                    {% if fraud_info %}
+                        <div class="fraud-info-box">
+                            <h3>{{ fraud_info.title }}</h3>
+                            <p>{{ fraud_info.description }}</p>
+
+                            <h4>How it's done:</h4>
+                            <ul>
+                                {% for item in fraud_info.how_it_is_done %}
+                                    <li>{{ item | safe }}</li>
+                                {% endfor %}
+                            </ul>
+
+                            <h4>Tips to protect yourself:</h4>
+                            <ul>
+                                {% for item in fraud_info.tips_to_solve %}
+                                    <li>{{ item | safe }}</li>
+                                {% endfor %}
+                            </ul>
+                        </div>
+                    {% else %}
+                        <p style="margin-top: 15px;">Detailed information for this fraud type is not available.</p>
+                    {% endif %}
+
+                {% else %} {# Transaction is Safe #}
+                    <img src="../static/images/Secure transaction.png" alt="Safe Transaction" style="width: 150px; margin-top: 20px;">
+                    <p style="margin-top: 15px;">This transaction appears safe based on our analysis.</p>
+                {% endif %}
+                <p style="margin-top: 15px;">Transaction recorded successfully.</p>
+            </div>
+        {% endif %}
+
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FraudDetectPro. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

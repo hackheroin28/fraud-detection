@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection System - Login</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div id="branding">
+            <img src="../static/images/Fraud detection.jpg" alt="Logo">
+            <h1>FraudDetectPro</h1>
+        </div>
+        <nav>
+            <ul>
+                {% if current_user.is_authenticated %}
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/predict">Predict Fraud</a></li>
+               
+                {% else %}
+                <li class="current"><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+                {% endif %}
+                <li><a href="/about">About</a></li>
+                <li><a href="/methodology">Methodology</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <h1 style="text-align: center; color: #333; margin-bottom: 30px;">Login to Your Account</h1>
+        <form method="POST">
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required>
+
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Login</button>
+        </form>
+        <p style="text-align: center; margin-top: 20px;">Don't have an account? <a href="/register">Register here</a>.</p>
+
+        <div style="text-align: center; margin-top: 30px;">
+            <img src="../static/images/login_security.png" alt="Login Security" style="width: 200px;">
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FraudDetectPro. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>

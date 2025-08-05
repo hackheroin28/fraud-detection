@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fraud Detection System - Contact Us</title>
+    <link rel="stylesheet" href="../static/style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <header>
+        <div id="branding">
+            <img src="../static/images/Fraud detection.jpg" alt="Logo">
+            <h1>FraudDetectPro</h1>
+        </div>
+        <nav>
+            <ul>
+                {% if current_user.is_authenticated %}
+                <li><a href="/">Dashboard</a></li>
+                <li><a href="/predict">Predict Fraud</a></li>
+                
+                {% else %}
+                <li><a href="/login">Login</a></li>
+                <li><a href="/register">Register</a></li>
+                {% endif %}
+                <li><a href="/about">About</a></li>
+                <li><a href="/methodology">Methodology</a></li>
+                <li class="current"><a href="/contact">Contact</a></li>
+                <li><a href="/logout">Logout</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash-message {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <div class="content-section">
+            <h1 style="text-align: center;">Contact FraudDetectPro</h1>
+            <p>We are here to help and answer any questions you might have. We look forward to hearing from you.</p>
+
+            <div class="image-gallery">
+                <img src="../static/images/contact_support.png" alt="Customer Support" style="width: 300px;">
+                <img src="../static/images/contact_email.png" alt="Email Us" style="width: 300px;">
+            </div>
+
+            <h2>Get in Touch</h2>
+            <p>Whether you have a question about our features, pricing, need a demo, or anything else, our team is ready to assist you.</p>
+
+            <h3>Email Us</h3>
+            <p>For general inquiries, support, or partnership opportunities, please email us at:</p>
+            <p><strong><a href="mailto:support@frauddetectpro.com">support@frauddetectpro.com</a></strong></p>
+
+            <h3>Call Us</h3>
+            <p>You can also reach us by phone during business hours (Monday - Friday, 9:00 AM - 5:00 PM IST):</p>
+            <p><strong>+91 12345 67890</strong></p>
+
+            <h3>Our Office</h3>
+            <p>FraudDetectPro Headquarters:<br>
+            [Your Company Address Here]<br>
+            [Your City, State, Pin Code]<br>
+            [Your Country]</p>
+
+            <div class="image-gallery">
+                <img src="../static/images/contact_location.jpg" alt="Our Location" style="width: 200px;">
+            </div>
+
+            <h3>Social Media</h3>
+            <p>Follow us on our social media channels to stay updated on our latest news, features, and fraud prevention tips:</p>
+            <ul>
+                <li><a href="#" target="_blank">LinkedIn</a></li>
+                <li><a href="#" target="_blank">Twitter</a></li>
+                <li><a href="#" target="_blank">Facebook</a></li>
+            </ul>
+
+            <p>We strive to respond to all inquiries within 24-48 business hours.</p>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 FraudDetectPro. All rights reserved.</p>
+    </footer>
+
+</body>
+</html>
